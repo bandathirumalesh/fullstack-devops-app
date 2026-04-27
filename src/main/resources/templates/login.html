@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Portal Login</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<main class="shell">
+    <section class="auth-hero">
+        <div class="hero-panel">
+            <div>
+                <span class="eyebrow">College Student Registration System</span>
+                <h1>Build a simple website with login, users, and student registration.</h1>
+                <p class="lead">
+                    This web application includes frontend pages, backend logic, and a database so you can learn how a complete student portal works.
+                </p>
+                <div class="hero-points">
+                    <div class="hero-point">
+                        <h3>Login or create a new user</h3>
+                        <p class="mini-copy">Use the right-side forms to create an account and sign in.</p>
+                    </div>
+                    <div class="hero-point">
+                        <h3>Register college students</h3>
+                        <p class="mini-copy">After login, you can submit student details and save them to the database.</p>
+                    </div>
+                    <div class="hero-point">
+                        <h3>Open in IntelliJ easily</h3>
+                        <p class="mini-copy">This is a standard Spring Boot Maven project, so it imports cleanly into IntelliJ IDEA.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-point">
+                <h3>Default demo login</h3>
+                <p class="mini-copy">Email: <strong>admin@collegeportal.com</strong></p>
+                <p class="mini-copy">Password: <strong>admin123</strong></p>
+            </div>
+        </div>
+
+        <div class="auth-panel">
+            <div class="tabs">
+                <a href="#login-card" class="tab-link active">Login</a>
+                <a href="#register-card" class="tab-link">New User</a>
+            </div>
+
+            <div class="flash" th:if="${successMessage}" th:text="${successMessage}"></div>
+            <div class="error-banner" th:if="${loginError}" th:text="${loginError}"></div>
+
+            <section class="auth-card" id="login-card">
+                <h2>Login</h2>
+                <p class="mini-copy">Enter your user account details to open the student dashboard.</p>
+                <form th:action="@{/login}" th:object="${loginForm}" method="post" class="form-grid">
+                    <div>
+                        <label for="loginEmail">Email</label>
+                        <input id="loginEmail" type="email" th:field="*{email}" placeholder="you@example.com">
+                        <small class="field-error" th:errors="*{email}"></small>
+                    </div>
+                    <div>
+                        <label for="loginPassword">Password</label>
+                        <input id="loginPassword" type="password" th:field="*{password}" placeholder="Enter password">
+                        <small class="field-error" th:errors="*{password}"></small>
+                    </div>
+                    <button type="submit" class="primary-btn">Login</button>
+                </form>
+            </section>
+
+            <section class="auth-card" id="register-card">
+                <h2>Create New User</h2>
+                <p class="mini-copy">Register a user account before login if you are new to the application.</p>
+                <form th:action="@{/register-user}" th:object="${userRegistrationForm}" method="post" class="form-grid">
+                    <div>
+                        <label for="name">Full Name</label>
+                        <input id="name" type="text" th:field="*{name}" placeholder="Enter your name">
+                        <small class="field-error" th:errors="*{name}"></small>
+                    </div>
+                    <div>
+                        <label for="registerEmail">Email</label>
+                        <input id="registerEmail" type="email" th:field="*{email}" placeholder="Enter email">
+                        <small class="field-error" th:errors="*{email}"></small>
+                    </div>
+                    <div class="two-col">
+                        <div>
+                            <label for="registerPassword">Password</label>
+                            <input id="registerPassword" type="password" th:field="*{password}" placeholder="Minimum 6 characters">
+                            <small class="field-error" th:errors="*{password}"></small>
+                        </div>
+                        <div>
+                            <label for="confirmPassword">Confirm Password</label>
+                            <input id="confirmPassword" type="password" th:field="*{confirmPassword}" placeholder="Repeat password">
+                            <small class="field-error" th:errors="*{confirmPassword}"></small>
+                        </div>
+                    </div>
+                    <button type="submit" class="primary-btn">Create User</button>
+                </form>
+            </section>
+        </div>
+    </section>
+</main>
+</body>
+</html>

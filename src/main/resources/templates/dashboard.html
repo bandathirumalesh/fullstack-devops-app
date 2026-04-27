@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Student Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<main class="dashboard-shell">
+    <header class="dashboard-header">
+        <div>
+            <span class="eyebrow">Student Registration Dashboard</span>
+            <h1>Welcome, <span th:text="${loggedInUserName}">User</span></h1>
+            <p class="lead">Register college students, manage basic academic details, and store records in the database.</p>
+        </div>
+        <div>
+            <a th:if="${isAdmin}" href="/h2-console" class="secondary-btn" target="_blank" rel="noreferrer">Database Console</a>
+            <a href="/logout" class="primary-btn">Logout</a>
+        </div>
+    </header>
+
+    <div class="flash" th:if="${successMessage}" th:text="${successMessage}"></div>
+
+    <section class="dashboard-grid">
+        <div class="panel">
+            <h2>Register Student</h2>
+            <p class="mini-copy">Create a student registration record for your college management website.</p>
+            <form th:action="@{/students}" th:object="${studentForm}" method="post" class="form-grid">
+                <div>
+                    <label for="fullName">Student Name</label>
+                    <input id="fullName" type="text" th:field="*{fullName}" placeholder="Enter full name">
+                    <small class="field-error" th:errors="*{fullName}"></small>
+                </div>
+                <div class="two-col">
+                    <div>
+                        <label for="rollNumber">Roll Number</label>
+                        <input id="rollNumber" type="text" th:field="*{rollNumber}" placeholder="e.g. CSE2026-001">
+                        <small class="field-error" th:errors="*{rollNumber}"></small>
+                    </div>
+                    <div>
+                        <label for="studentEmail">Email</label>
+                        <input id="studentEmail" type="email" th:field="*{email}" placeholder="student@example.com">
+                        <small class="field-error" th:errors="*{email}"></small>
+                    </div>
+                </div>
+                <div class="two-col">
+                    <div>
+                        <label for="department">Department</label>
+                        <select id="department" th:field="*{department}">
+                            <option value="">Select department</option>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Mechanical">Mechanical</option>
+                            <option value="Civil">Civil</option>
+                            <option value="Business Administration">Business Administration</option>
+                        </select>
+                        <small class="field-error" th:errors="*{department}"></small>
+                    </div>
+                    <div>
+                        <label for="yearOfStudy">Year of Study</label>
+                        <select id="yearOfStudy" th:field="*{yearOfStudy}">
+                            <option value="">Select year</option>
+                            <option value="1st Year">1st Year</option>
+                            <option value="2nd Year">2nd Year</option>
+                            <option value="3rd Year">3rd Year</option>
+                            <option value="4th Year">4th Year</option>
+                        </select>
+                        <small class="field-error" th:errors="*{yearOfStudy}"></small>
+                    </div>
+                </div>
+                <div class="two-col">
+                    <div>
+                        <label for="phoneNumber">Phone Number</label>
+                        <input id="phoneNumber" type="text" th:field="*{phoneNumber}" placeholder="10-digit mobile number">
+                        <small class="field-error" th:errors="*{phoneNumber}"></small>
+                    </div>
+                    <div>
+                        <label for="address">Address</label>
+                        <textarea id="address" th:field="*{address}" rows="3" placeholder="Enter address"></textarea>
+                        <small class="field-error" th:errors="*{address}"></small>
+                    </div>
+                </div>
+                <button type="submit" class="primary-btn">Register Student</button>
+            </form>
+        </div>
+
+        <div class="table-panel" th:if="${isAdmin}">
+            <h2>Registered Students</h2>
+            <div class="stats">
+                <div class="stat-card">
+                    <span>Total Students</span>
+                    <strong th:text="${studentCount}">0</strong>
+                </div>
+                <div class="stat-card">
+                    <span>Database</span>
+                    <strong>H2</strong>
+                </div>
+                <div class="stat-card">
+                    <span>App Stack</span>
+                    <strong>Spring Boot</strong>
+                </div>
+            </div>
+
+            <div class="empty-state" th:if="${#lists.isEmpty(students)}">
+                No students registered yet. Use the form to create the first student record.
+            </div>
+
+            <div class="student-list" th:unless="${#lists.isEmpty(students)}">
+                <article class="student-card" th:each="student : ${students}">
+                    <div class="student-card-header">
+                        <div>
+                            <h3 th:text="${student.fullName}">Student Name</h3>
+                            <p class="student-meta" th:text="${student.email}">email@example.com</p>
+                        </div>
+                        <span class="badge" th:text="${student.rollNumber}">ROLL001</span>
+                    </div>
+                    <div class="student-details">
+                        <div><strong>Department:</strong> <span th:text="${student.department}">Computer Science</span></div>
+                        <div><strong>Year:</strong> <span th:text="${student.yearOfStudy}">1st Year</span></div>
+                        <div><strong>Phone:</strong> <span th:text="${student.phoneNumber}">9999999999</span></div>
+                        <div><strong>Address:</strong> <span th:text="${student.address}">Address</span></div>
+                    </div>
+                </article>
+            </div>
+        </div>
+
+        <div class="table-panel" th:unless="${isAdmin}">
+            <h2>Admin Access Only</h2>
+            <div class="empty-state">
+                Student records and total registration count are visible only to the admin account.
+            </div>
+            <div class="empty-state">
+                You can still use this page to register new students, but only the admin can review all saved data.
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>
